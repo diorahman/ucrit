@@ -65,7 +65,7 @@ exports.sql = function (statement) {
     suffix = ends.join(' ')
   }
 
-  var text = sql.join('').trim() + suffix
+  var text = sql.join('') + suffix
 
   return {
     text,

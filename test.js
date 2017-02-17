@@ -35,6 +35,6 @@ test('select', function (t) {
     SELECT * FROM table WHERE id = __ARG_${id}
     ${any ? 'AND deleted_at IS NULL' : ''}
     ${any ? 'AND activated_at IS NULL' : ''}`
-  t.equal(statement.text, 'SELECT * FROM table WHERE id = $1 AND deleted_at IS NULL AND activated_at IS NULL')
+  t.equal(statement.text.trim(), 'SELECT * FROM table WHERE id = $1 AND deleted_at IS NULL AND activated_at IS NULL')
   t.equal(1, 1)
 })
