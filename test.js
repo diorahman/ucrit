@@ -26,3 +26,15 @@ test('insert', function (t) {
   t.equal(statement.text, 'INSERT INTO table (a) VALUES ($1)')
   t.deepEqual(statement.values, [1])
 })
+
+test('select', function (t) {
+  t.plan(2)
+  var id = 1
+  var any = true
+  var statement = sql`
+    SELECT * FROM table WHERE id = __ARG_${id}
+    ${any ? 'AND deleted_at IS NULL' : ''}
+    ${any ? 'AND activated_at IS NULL' : ''}`
+  t.equal(statement.text, 'SELECT * FROM table WHERE id = $1 AND deleted_at IS NULL AND activated_at IS NULL')
+  t.equal(1, 1)
+})
