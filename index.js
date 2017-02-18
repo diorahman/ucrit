@@ -29,7 +29,10 @@ exports.sql = function (statement) {
   var count = 1
   var parts = statement.filter(s => s.trim())
   for (var i = 0; i < parts.length; i++) {
-    if (parts[i].indexOf('__ARG_') >= 0) {
+    if (parts[i].indexOf('__FIL_') >= 0 && Array.isArray(args[i])) {
+      // FIXME: check args[i] should be an array
+      sql.push(parts[i].replace('__FIL_', `${args[i].join(', ')}`))
+    } else if (parts[i].indexOf('__ARG_') >= 0) {
       sql.push(parts[i].replace('__ARG_', `$${count}`))
       values.push(args[i])
       count++
@@ -59,7 +62,6 @@ exports.sql = function (statement) {
       sql.push(parts[i])
     }
   }
-
   var ends = args.splice(i)
   var suffix = ''
   if (ends.length > 0) {

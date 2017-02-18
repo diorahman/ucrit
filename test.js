@@ -47,3 +47,12 @@ test('select', function (t) {
   t.equal(statement.text.trim(), 'SELECT * FROM table WHERE id = $1 AND deleted_at IS NULL AND activated_at IS NULL')
   t.equal(1, 1)
 })
+
+test('filter', function (t) {
+  t.plan(1)
+  var cols = ['a', 'b', 'c']
+  var statement = sql`
+    SELECT __FIL_${cols} FROM table
+  `
+  t.equal(statement.text.trim(), 'SELECT a, b, c FROM table')
+})
