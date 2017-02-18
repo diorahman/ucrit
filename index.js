@@ -8,12 +8,10 @@ exports.keyVals = function (data) {
     var val = data[keys[i]]
     if (val === undefined || val === null) {
       val = 'NULL'
-    } else if (typeof val === 'string') {
-      val = `'${val}'`
     } else if (val instanceof Date) {
-      val = `'${moment.utc(val.valueOf()).format()}'`
+      val = moment.utc(val.valueOf()).format()
     } else if (typeof val === 'object') {
-      val = `'${JSON.stringify(val)}'`
+      val = JSON.stringify(val)
     }
     vals.push(val)
   }
