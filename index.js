@@ -7,7 +7,7 @@ exports.keyVals = function (data) {
   for (var i = 0; i < keys.length; i++) {
     var val = data[keys[i]]
     if (val === undefined || val === null) {
-      val = 'NULL'
+      continue
     } else if (val instanceof Date) {
       val = moment.utc(val.valueOf()).format()
     } else if (typeof val === 'object') {
