@@ -49,6 +49,9 @@ exports.sql = function (statement) {
     } else if (parts[i].indexOf('__VAL_') >= 0) {
       var val = []
       for (var m = 0; m < args[i].keys.length; m++) {
+        if (args[i].vals[m] === undefined) {
+          continue
+        }
         val.push(`$${count}`)
         count++
       }
