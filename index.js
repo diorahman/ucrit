@@ -2,10 +2,11 @@ var moment = require('moment')
 var hash = require('hash-sum')
 
 exports.keyVals = function (data) {
-  var keys = Object.keys(data)
+  var cols = Object.keys(data)
   var vals = []
-  for (var i = 0; i < keys.length; i++) {
-    var val = data[keys[i]]
+  var keys = []
+  for (var i = 0; i < cols.length; i++) {
+    var val = data[cols[i]]
     if (val === undefined) {
       continue
     } else if (val instanceof Date) {
@@ -13,6 +14,7 @@ exports.keyVals = function (data) {
     } else if (typeof val === 'object') {
       val = JSON.stringify(val)
     }
+    keys.push(cols[i])
     vals.push(val)
   }
   return {keys, vals}
@@ -40,7 +42,9 @@ exports.sql = function (statement) {
     } else if (parts[i].indexOf('__COL_') >= 0) {
       var col = []
       for (var l = 0; l < args[i].keys.length; l++) {
+        console.log('original', args[i].keys[l], args[i].vals[l])
         if (args[i].vals[l] === undefined) {
+          console.log('skip', args[i].keys[l], args[i].vals[l])
           continue
         }
         col.push(`${args[i].keys[l]}`)

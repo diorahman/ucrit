@@ -27,6 +27,15 @@ test('insert', function (t) {
   t.deepEqual(statement.values, [1])
 })
 
+test('insert', function (t) {
+  t.plan(2)
+  var obj = {a: 1, b: undefined, c: true, d: null, e: undefined}
+  var prepared = keyVals(obj)
+  var statement = sql`INSERT INTO table __COL_${prepared} VALUES __VAL_${prepared}`
+  t.equal(statement.text, 'INSERT INTO table (a, c, d) VALUES ($1, $2, $3)')
+  t.deepEqual(statement.values, [1, true, 'null'])
+})
+
 test('select', function (t) {
   t.plan(2)
   var id = 1
