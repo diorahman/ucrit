@@ -40,6 +40,9 @@ exports.sql = function (statement) {
     } else if (parts[i].indexOf('__COL_') >= 0) {
       var col = []
       for (var l = 0; l < args[i].keys.length; l++) {
+        if (args[i].vals[l] === undefined) {
+          continue
+        }
         col.push(`${args[i].keys[l]}`)
       }
       sql.push(parts[i].replace('__COL_', `(${col.join(', ')})`))
