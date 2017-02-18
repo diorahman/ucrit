@@ -9,6 +9,8 @@ exports.keyVals = function (data) {
     var val = data[cols[i]]
     if (val === undefined) {
       continue
+    } else if (val === null) {
+      val = null
     } else if (val instanceof Date) {
       val = moment.utc(val.valueOf()).format()
     } else if (typeof val === 'object') {

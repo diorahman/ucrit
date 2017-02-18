@@ -33,7 +33,7 @@ test('insert', function (t) {
   var prepared = keyVals(obj)
   var statement = sql`INSERT INTO table __COL_${prepared} VALUES __VAL_${prepared}`
   t.equal(statement.text, 'INSERT INTO table (a, c, d) VALUES ($1, $2, $3)')
-  t.deepEqual(statement.values, [1, true, 'null'])
+  t.deepEqual(statement.values, [1, true, null])
 })
 
 test('select', function (t) {
