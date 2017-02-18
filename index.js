@@ -42,20 +42,12 @@ exports.sql = function (statement) {
     } else if (parts[i].indexOf('__COL_') >= 0) {
       var col = []
       for (var l = 0; l < args[i].keys.length; l++) {
-        console.log('original', args[i].keys[l], args[i].vals[l])
-        if (args[i].vals[l] === undefined) {
-          console.log('skip', args[i].keys[l], args[i].vals[l])
-          continue
-        }
         col.push(`${args[i].keys[l]}`)
       }
       sql.push(parts[i].replace('__COL_', `(${col.join(', ')})`))
     } else if (parts[i].indexOf('__VAL_') >= 0) {
       var val = []
       for (var m = 0; m < args[i].keys.length; m++) {
-        if (args[i].vals[m] === undefined) {
-          continue
-        }
         val.push(`$${count}`)
         count++
       }
