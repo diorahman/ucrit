@@ -28,6 +28,15 @@ test('insert', function (t) {
 })
 
 test('insert', function (t) {
+    t.plan(2)
+    var obj = {a: 1, b: '2017-12-30T17:00:00Z', c: 'dc486f89-fff3-42bf-adfe-b6479494881e'}
+    var prepared = keyVals(obj)
+    var statement = sql`INSERT INTO table __COL_${prepared} VALUES __VAL_${prepared}`
+    t.equal(statement.text, 'INSERT INTO table (a, b, c) VALUES ($1, $2::date, $3::uuid)')
+    t.deepEqual(statement.values, [1, '2017-12-30T17:00:00Z', 'dc486f89-fff3-42bf-adfe-b6479494881e'])
+})
+
+test('insert', function (t) {
   t.plan(2)
   var obj = {a: 1, b: undefined, c: true, d: null, e: undefined}
   var prepared = keyVals(obj)

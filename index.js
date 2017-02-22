@@ -1,6 +1,19 @@
 var moment = require('moment')
 var hash = require('hash-sum')
 
+function valType (data) {
+  var type;
+  if (/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/.test(data)) {
+    type = 'uuid';
+  } else if (typeof data === 'string'){
+    var date = new Date(data)
+    if (date != 'Invalid Date') {
+      type = 'date';
+    }
+  }
+  return type;
+}
+
 exports.keyVals = function (data) {
   var cols = Object.keys(data)
   var vals = []
@@ -33,13 +46,15 @@ exports.sql = function (statement) {
       // FIXME: check args[i] should be an array
       sql.push(parts[i].replace('__FIL_', `${args[i].join(', ')}`))
     } else if (parts[i].indexOf('__ARG_') >= 0) {
-      sql.push(parts[i].replace('__ARG_', `$${count}`))
+      var type = valType(args[i])
+      sql.push(parts[i].replace('__ARG_', `$${count}${type ? '::'+type : ''}`))
       values.push(args[i])
       count++
     } else if (parts[i].indexOf('__SET_') >= 0) {
       var set = []
       for (var k = 0; k < args[i].keys.length; k++) {
-        set.push(`${args[i].keys[k]}=$${count}`)
+        var type = valType(args[i].vals[k])
+        set.push(`${args[i].keys[k]}=$${count}${ type ? '::'+type : ''}`)
         values.push(args[i].vals[k])
         count++
       }
@@ -53,7 +68,8 @@ exports.sql = function (statement) {
     } else if (parts[i].indexOf('__VAL_') >= 0) {
       var val = []
       for (var m = 0; m < args[i].keys.length; m++) {
-        val.push(`$${count}`)
+        var type = valType(args[i].vals[m])
+        val.push(`$${count}${type ? '::'+type : ''}`)
         count++
       }
       values = values.concat(args[i].vals)
