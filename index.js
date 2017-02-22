@@ -18,14 +18,12 @@ exports.keyVals = function (data) {
   var cols = Object.keys(data)
   var vals = []
   var keys = []
-  var types = []
   for (var i = 0; i < cols.length; i++) {
     var val = data[cols[i]]
     if (val === undefined) {
       continue
     } else if (val === null) {
       val = null
-      type = 'null'
     } else if (val instanceof Date) {
       val = moment.utc(val.valueOf()).format()
     } else if (typeof val === 'object') {
@@ -33,9 +31,8 @@ exports.keyVals = function (data) {
     }
     keys.push(cols[i])
     vals.push(val)
-    types.push(valType(val))
   }
-  return {keys, vals, types}
+  return {keys, vals}
 }
 
 exports.sql = function (statement) {
